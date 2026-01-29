@@ -3,9 +3,15 @@ Vercel serverless function: POST /api/analyze with { "url": "https://..." }
 Runs BrandAnalyzer and returns the analysis JSON (no file write; stateless).
 """
 import json
+import sys
+from pathlib import Path
 from http.server import BaseHTTPRequestHandler
 
-# Project root is cwd on Vercel; gpt_web_descrirption is at root
+# Ensure project root is on path (Vercel CWD is project root, but sys.path may not include it)
+_root = Path(__file__).resolve().parent.parent
+if str(_root) not in sys.path:
+    sys.path.insert(0, str(_root))
+
 from gpt_web_descrirption import BrandAnalyzer
 
 
