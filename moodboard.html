@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brand Moodboard - Dynamic Template</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Open+Sans:wght@400;600&family=Montserrat:wght@400;700&family=Lora:wght@400;700&family=Raleway:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            padding: 40px 20px;
+            min-height: 100vh;
+            min-width: 320px;
+            overflow-x: auto;
+        }
+
+    
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 250px 1fr 400px;
+            grid-template-rows: auto auto auto 1fr;
+            gap: 24px;
+            grid-template-areas:
+                "colors brand-name competitive"
+                "colors description demographic"
+                "colors products demographic"
+                "colors history tone";
+        }
+        
+        /* Reduce gap on desktop for tighter spacing */
+        @media (min-width: 1025px) {
+            .container {
+                gap: 12px;
+                row-gap: 8px;
+                grid-template-rows: min-content min-content auto 1fr;
+                align-items: start;
+            }
+        }
+        
+        /* Even tighter on larger screens */
+        @media (min-width: 1400px) {
+            .container {
+                gap: 10px;
+                row-gap: 6px;
+            }
+        }
+
+        .compartment {
+            background: rgba(40, 40, 40, 0.95);
+            border: 3px solid var(--tertiary-color, #e53935);
+            padding: 24px;
+            border-radius: 8px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            min-width: 0; /* Prevents grid blowout */
+            overflow-wrap: break-word;
+            word-wrap: break-word;
+        }
+
+        .compartment:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 48px rgba(0, 0, 0, 0.3);
+        }
+
+        .compartment-title {
+            font-weight: bold;
+            margin-bottom: 16px;
+            color: var(--primary-color, #ffffff);
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-bottom: 2px solid var(--tertiary-color, #e53935);
+            padding-bottom: 8px;
+        }
+
+        .compartment-content {
+            color: var(--secondary-color, #e0e0e0);
+            line-height: 1.6;
+            word-break: break-word;
+            overflow-wrap: break-word;
+        }
+
+        .colors-section {
+            grid-area: colors;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .color-box {
+            min-height: 140px;
+            border-radius: 8px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease;
+        }
+
+        .color-box:hover {
+            transform: scale(1.05);
+        }
+
+        .color-label {
+            font-weight: bold;
+            color: #ffffff;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .color-code {
+            color: #ffffff;
+            font-family: 'Courier New', monospace;
+            background: rgba(0, 0, 0, 0.4);
+            padding: 6px 10px;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+        }
+
+        .brand-name {
+            grid-area: brand-name;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: auto;
+            align-self: start;
+        }
+
+        .brand-name .compartment-content {
+            font-size: 2.5rem;
+            font-weight: bold;
+            text-align: center;
+            text-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+            line-height: 1.2;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            max-width: 100%;
+            hyphens: auto;
+            padding: 0 16px;
+        }
+
+        /* Reduce size and space for brand-name on desktop/laptop */
+        @media (min-width: 1025px) {
+            .brand-name {
+                min-height: auto;
+                max-height: 100px;
+                height: fit-content;
+                padding: 12px 20px !important;
+                margin-bottom: 0;
+                align-self: start;
+            }
+            
+            .brand-name .compartment-content {
+                font-size: clamp(1.6rem, 2.2vw, 2rem);
+                line-height: 1.1;
+                padding: 0;
+            }
+        }
+        
+        /* Further reduce on larger screens */
+        @media (min-width: 1400px) {
+            .brand-name {
+                max-height: 90px;
+                padding: 10px 20px !important;
+            }
+            
+            .brand-name .compartment-content {
+                font-size: clamp(1.5rem, 2vw, 1.9rem);
+            }
+        }
+
+        .competitive {
+            grid-area: competitive;
+            align-self: start;
+        }
+        
+        /* Constrain competitive section on desktop to prevent row stretching */
+        @media (min-width: 1025px) {
+            .competitive {
+                max-height: 400px;
+                overflow-y: auto;
+                align-self: start;
+            }
+        }
+
+        .competitive ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .competitive li {
+            padding: 8px 0;
+            padding-left: 20px;
+            position: relative;
+            word-break: break-word;
+        }
+
+        .competitive li:before {
+            content: "▸";
+            position: absolute;
+            left: 0;
+            color: var(--tertiary-color, #e53935);
+            font-weight: bold;
+        }
+
+        .description {
+            grid-area: description;
+            align-self: start;
+        }
+
+        .products {
+            grid-area: products;
+        }
+
+        .products ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .products li {
+            padding: 10px 0;
+            padding-left: 24px;
+            position: relative;
+            border-left: 3px solid var(--tertiary-color, #e53935);
+            margin-bottom: 8px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 0 4px 4px 0;
+        }
+
+        .demographic {
+            grid-area: demographic;
+            overflow-y: auto;
+            max-height: 600px;
+        }
+
+        .demographic-item {
+            margin-bottom: 12px;
+            padding: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 4px;
+            word-break: break-word;
+        }
+
+        .demographic-label {
+            font-weight: bold;
+            color: var(--primary-color, #e53935);
+            margin-bottom: 4px;
+        }
+
+        .history {
+            grid-area: history;
+        }
+
+        .tone {
+            grid-area: tone;
+        }
+
+        .tone ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .tone li {
+            padding: 12px 16px;
+            margin: 8px 0;
+            background: rgba(0, 0, 0, 0.2);
+            border-left: 4px solid var(--tertiary-color, #e53935);
+            border-radius: 4px;
+        }
+
+        @media (max-width: 1400px) {
+            .container {
+                grid-template-columns: 220px 1fr 380px;
+            }
+        }
+
+        @media (max-width: 1200px) {
+            .container {
+                grid-template-columns: 200px 1fr 350px;
+            }
+        }
+
+        @media (max-width: 1024px) {
+            .container {
+                grid-template-columns: 180px 1fr;
+                grid-template-areas:
+                    "colors brand-name"
+                    "colors competitive"
+                    "colors demographic"
+                    "description description"
+                    "products products"
+                    "history history"
+                    "tone tone";
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+                grid-template-areas:
+                    "brand-name"
+                    "colors"
+                    "description"
+                    "competitive"
+                    "products"
+                    "demographic"
+                    "history"
+                    "tone";
+            }
+
+            .colors-section {
+                flex-direction: row;
+                flex-wrap: wrap;
+            }
+
+            .color-box {
+                flex: 1;
+                min-width: 150px;
+            }
+
+            .brand-name .compartment-content {
+                font-size: 2rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 20px 10px;
+            }
+
+            .compartment {
+                padding: 16px;
+            }
+
+            .brand-name .compartment-content {
+                font-size: 1.5rem;
+            }
+        }
+
+        .loading {
+            text-align: center;
+            color: #ffffff;
+            font-size: 1.5rem;
+            padding: 40px;
+        }
+
+        .error {
+            background: rgba(229, 57, 53, 0.2);
+            border: 2px solid #e53935;
+            color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px;
+            text-align: center;
+        }
+
+        /* Dynamic typography classes that will be updated via JavaScript */
+        #dynamic-typography {
+            /* This will be populated dynamically */
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <div class="loading">Loading brand moodboard...</div>
+    </div>
+
+    <script>
+        // Configuration: Set your JSON file path here (used when no sessionStorage data)
+        const JSON_FILE_PATH = 'brand_analysis.json';
+        const SESSION_STORAGE_KEY = 'brand_analysis';
+
+        function applyTypography(data) {
+            const typography = data.typography || {};
+            const primaryFont = typography.primary || 'Arial, sans-serif';
+            const secondaryFont = typography.secondary || 'Roboto, sans-serif';
+            
+            // Remove any existing dynamic typography styles
+            const existingStyle = document.getElementById('dynamic-typography');
+            if (existingStyle) {
+                existingStyle.remove();
+            }
+            
+            // Create new style element with dynamic fonts
+            const style = document.createElement('style');
+            style.id = 'dynamic-typography';
+            style.textContent = `
+                /* Primary font for headings and titles (bold) */
+                .compartment-title, 
+                .brand-name .compartment-content,
+                .color-label,
+                .demographic-label {
+                    font-family: ${primaryFont};
+                }
+                
+                /* Secondary font for body text and content */
+                .compartment-content,
+                .color-code,
+                .demographic-item,
+                .competitive li,
+                .products li,
+                .tone li {
+                    font-family: ${secondaryFont};
+                }
+            `;
+            document.head.appendChild(style);
+            
+            console.log('Typography applied:', { primaryFont, secondaryFont });
+        }
+
+        function applyColorPalette(data) {
+            const colors = data.color_palette || {};
+            const primaryColor = colors.primary || '#1A237E';
+            const secondaryColor = colors.secondary || '#FF4081';
+            const tertiaryColor = colors.tertiary || '#00C853';
+            
+            // Set CSS variables for dynamic color theming
+            document.documentElement.style.setProperty('--primary-color', primaryColor);
+            document.documentElement.style.setProperty('--secondary-color', secondaryColor);
+            document.documentElement.style.setProperty('--tertiary-color', tertiaryColor);
+            
+            console.log('Color palette applied:', { primaryColor, secondaryColor, tertiaryColor });
+        }
+
+        function renderMoodboard(data) {
+            const colors = data.color_palette || {};
+            const demographics = data.customer_demographics || {};
+            
+            console.log('Rendering with colors:', colors);
+            
+            const html = `
+                <div class="container">
+                    <!-- Colors Section -->
+                    <div class="colors-section">
+                        <div class="color-box" style="background-color: ${colors.primary || '#000000'};">
+                            <div class="color-label">Primary Color</div>
+                            <div class="color-code">${colors.primary || 'N/A'}</div>
+                        </div>
+                        <div class="color-box" style="background-color: ${colors.secondary || '#000000'};">
+                            <div class="color-label">Secondary Color</div>
+                            <div class="color-code">${colors.secondary || 'N/A'}</div>
+                        </div>
+                        <div class="color-box" style="background-color: ${colors.tertiary || '#000000'};">
+                            <div class="color-label">Tertiary Color</div>
+                            <div class="color-code">${colors.tertiary || 'N/A'}</div>
+                        </div>
+                    </div>
+
+                    <!-- Brand Name -->
+                    <div class="compartment brand-name">
+                        <div class="compartment-content">${data.brand_name || 'Brand Name'}</div>
+                    </div>
+
+                    <!-- Competitive Advantages -->
+                    <div class="compartment competitive">
+                        <div class="compartment-title">Competitive Advantages</div>
+                        <div class="compartment-content">
+                            <ul>
+                                ${(data.competitive_advantages || []).map(adv => `<li>${adv}</li>`).join('')}
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Description -->
+                    <div class="compartment description">
+                        <div class="compartment-title">Description</div>
+                        <div class="compartment-content">
+                            ${data.market_positioning || 'No description available'}
+                        </div>
+                    </div>
+
+                    <!-- Popular Products -->
+                    <div class="compartment products">
+                        <div class="compartment-title">Popular Products</div>
+                        <div class="compartment-content">
+                            <ul>
+                                ${(data.popular_products_services || []).map(product => `<li>${product}</li>`).join('')}
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Demographics -->
+                    <div class="compartment demographic">
+                        <div class="compartment-title">Demographics</div>
+                        <div class="compartment-content">
+                            ${Object.entries(demographics).map(([key, value]) => `
+                                <div class="demographic-item">
+                                    <div class="demographic-label">${key.replace(/_/g, ' ').toUpperCase()}</div>
+                                    <div>${value}</div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+
+                    <!-- History -->
+                    <div class="compartment history">
+                        <div class="compartment-title">History</div>
+                        <div class="compartment-content">
+                            ${data.brand_story || 'No brand story available'}
+                        </div>
+                    </div>
+
+                    <!-- Tone -->
+                    <div class="compartment tone">
+                        <div class="compartment-title">Their Tone</div>
+                        <div class="compartment-content">
+                            <ul>
+                                ${(data.brand_personality || []).map(trait => `<li>${trait}</li>`).join('')}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('app').innerHTML = html;
+            applyTypography(data);
+            applyColorPalette(data);
+        }
+
+        // Load moodboard: prefer sessionStorage (from Vercel flow), else fetch JSON file (local/dev)
+        function loadMoodboard() {
+            try {
+                const stored = sessionStorage.getItem(SESSION_STORAGE_KEY);
+                if (stored) {
+                    const data = JSON.parse(stored);
+                    console.log('Brand data loaded from session:', data.brand_name || data);
+                    renderMoodboard(data);
+                    return;
+                }
+            } catch (e) {
+                console.warn('Session storage read failed:', e);
+            }
+
+            console.log('Fetching brand data from:', JSON_FILE_PATH);
+            fetch(JSON_FILE_PATH)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Brand data loaded successfully:', data);
+                    renderMoodboard(data);
+                })
+                .catch(error => {
+                    console.error('Error loading brand data:', error);
+                    document.getElementById('app').innerHTML = `
+                        <div class="error">
+                            <h2>Error Loading Moodboard</h2>
+                            <p>${error.message}</p>
+                            <p style="margin-top: 10px; font-size: 0.9em;">Generate a moodboard from the <a href="/" style="color: #e53935;">home page</a>, or ensure 'brand_analysis.json' is available (for local use).</p>
+                        </div>
+                    `;
+                });
+        }
+
+        // Auto-reload when JSON file changes (for development)
+        // This watches for file changes every 2 seconds
+        let lastModified = null;
+        function watchForChanges() {
+            fetch(JSON_FILE_PATH, { method: 'HEAD' })
+                .then(response => {
+                    const modified = response.headers.get('Last-Modified');
+                    if (lastModified && modified !== lastModified) {
+                        console.log('JSON file changed, reloading...');
+                        loadMoodboard();
+                    }
+                    lastModified = modified;
+                })
+                .catch(() => {
+                    // Silently fail if can't check
+                });
+        }
+
+        // Initialize
+        loadMoodboard();
+        
+        // Watch for changes every 2 seconds
+        setInterval(watchForChanges, 2000);
+
+        // Also reload when window regains focus (in case file was edited)
+        window.addEventListener('focus', () => {
+            console.log('Window focused, checking for updates...');
+            setTimeout(loadMoodboard, 100);
+        });
+    </script>
+</body>
+</html>

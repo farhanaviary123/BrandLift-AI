@@ -1,0 +1,36 @@
+# Exclude everything not needed for Vercel deploy (only app.py flow: index, moodboard, api, analyzer)
+Demo Codes
+venv
+__pycache__
+*.pyc
+.git
+*.log
+*.tmp
+*.bak
+.env.local
+.venv
+
+# Other scripts not used by api/analyze
+app.py
+claude_web_description.py
+web_description_claude.py
+image_scrapper.py
+video_scrapper.py
+web_scrapper.py
+test_target_audience.py
+backup_*
+*_backup*
+Untitled
+
+# Optional: exclude large or non-essential assets (uncomment if you want)
+# *.mp4
+# *.jpg
+# *.png
+# lamborghini.jpg
+# video.mp4
+# screenshot.png
+# product_and_color_scrape_result.json
+# image_analysis_output.json
+# video_analysis.json
+# target_audience.json
+# brandlift-*.json

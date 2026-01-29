@@ -1,0 +1,9 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "functions": {
+    "api/**/*.py": {
+      "runtime": "python",
+      "excludeFiles": "Demo Codes/**|venv/**|**/__pycache__/**|**/*.pyc|backup*|*_backup*|test_*.py|*_scrapper.py|claude_*.py|web_description_claude*|image_scrapper*|video_scrapper*|web_scrapper.py"
+    }
+  }
+}

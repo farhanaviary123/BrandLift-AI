@@ -1,0 +1,32 @@
+# Dependencies and env
+venv/
+.venv/
+.env
+.env.local
+*.pyc
+__pycache__/
+
+# Everything not needed for Vercel deploy (only app flow files go to repo)
+Demo Codes/
+backup*
+*_backup*
+app.py
+claude_web_description.py
+web_description_claude.py
+image_scrapper.py
+video_scrapper.py
+web_scrapper.py
+test_target_audience.py
+Untitled
+*.log
+*.tmp
+*.bak
+
+# Optional: uncomment to keep repo minimal (only deploy set)
+# *.jpg
+# *.png
+# *.svg
+# *.mp4
+# *.json
+# !brand_analysis.json
+# !vercel.json
